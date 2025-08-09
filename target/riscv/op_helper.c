@@ -718,3 +718,10 @@ target_ulong helper_hyp_hlvx_wu(CPURISCVState *env, target_ulong addr)
 }
 
 #endif /* !CONFIG_USER_ONLY */
+
+void helper_cube(CPURISCVState *env, target_ulong rd, target_ulong rs1)
+{
+    MemOpIdx oi = make_memop_idx(MO_TEUQ, 0);
+    target_ulong val = cpu_ldq_mmu(env, env->gpr[rs1], oi, GETPC());
+    env->gpr[rd] = val * val * val;
+}

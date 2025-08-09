@@ -1221,3 +1221,18 @@ static bool trans_csrrci(DisasContext *ctx, arg_csrrci * a)
                              ctx->zero, ctx->zero, mask, ctx->zero);
     }
 }
+
+static bool trans_cube(DisasContext *ctx, arg_cube *a)
+{
+#if 0 /* Helper */
+    gen_helper_cube(tcg_env, tcg_constant_tl(a->rd), tcg_constant_tl(a->rs1));
+#else /* IR */
+    TCGv dest = tcg_temp_new();
+    TCGv rd = get_gpr(ctx, a->rd, EXT_NONE);
+    tcg_gen_qemu_ld_tl(dest, get_gpr(ctx, a->rs1, EXT_NONE), ctx->mem_idx, MO_TEUQ);
+    tcg_gen_mul_tl(rd, dest, dest);
+    tcg_gen_mul_tl(rd, rd, dest);
+    gen_set_gpr(ctx, a->rd, rd);
+#endif
+    return true;
+}
