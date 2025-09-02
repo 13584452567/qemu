@@ -32,7 +32,7 @@ jobs:
           VERSION=$(git describe --tags || echo "dev-$(date +'%Y%m%d-%H%M%S')")
           ARCHIVE_NAME="qemu-g233-board-${VERSION}"
           mkdir -p ${ARCHIVE_NAME}/bin
-          cp -a build/qemu-system-* ${ARCHIVE_NAME}/bin/ || cp -a x86_64-softmmu/qemu-system-* ${ARCHIVE_NAME}/bin/
+          cp -a build/* ${ARCHIVE_NAME}/bin/
           tar -czf "${ARCHIVE_NAME}.tar.gz" ${ARCHIVE_NAME}
 
       - name: Upload artifacts (tar.gz)
