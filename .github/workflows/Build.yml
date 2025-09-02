@@ -12,22 +12,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5.0.0
       - name: Set up dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build meson
       - name: Build QEMU
         run: |
-          ./configure
+          ./configure --static
           make -j$(nproc)
       - name: Package binary artifacts
         run: |
           VERSION=$(git describe --tags || echo "dev-$(date +'%Y%m%d-%H%M%S')")
           ARCHIVE_NAME="qemu-g233-board-${VERSION}"
           mkdir -p ${ARCHIVE_NAME}/bin
-          mkdir -p ${ARCHIVE_NAME}/bin/softmmu
-          cp -a build/* ${ARCHIVE_NAME}/bin/ || cp -a x86_64-softmmu/* ${ARCHIVE_NAME}/bin/softmmu
+          mkdir -p ${ARCHIVE_NAME}/bin/pc-bios
+          cp -a build/qemu-system-* ${ARCHIVE_NAME}/bin/
+          cp -a /home/runner/work/qemu/qemu/pc-bios/* ${ARCHIVE_NAME}/bin/pc-bios
           tar -czf "${ARCHIVE_NAME}.tar.gz" ${ARCHIVE_NAME}
       - name: Upload artifacts (tar.gz)
         uses: actions/upload-artifact@v4
