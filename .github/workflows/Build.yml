@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up dependencies
         run: |
@@ -36,7 +36,7 @@ jobs:
           tar -czf "${ARCHIVE_NAME}.tar.gz" ${ARCHIVE_NAME}
 
       - name: Upload artifacts (tar.gz)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: qemu-g233-board-tar
           path: "*.tar.gz"
